@@ -43,12 +43,19 @@ class ProductVeiw(generics.ListCreateAPIView):
     def get_queryset(self):
         return super().get_queryset().filter(user=self.request.user)
     
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
+    
 
 class ProductVeiwDetails(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = [IsAuthenticated]    
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
     lookup_field = 'id'
+
     def get_queryset(self):
         return super().get_queryset().filter(user=self.request.user)
+    
+    def perform_update(self, serializer):
+        serializer.save(user=self.request.user)
 
